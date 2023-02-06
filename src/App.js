@@ -12,13 +12,10 @@ import ChatWindow from './components/chatWindow';
 import NewChat from './components/newChat';
 import Login from './components/login';
 
+import Api from './Api';
+
 export default () => {
-  const [chatList, setChatList] = useState([
-    {chatId: 1, title:'Fulano de Tal', avatar: 'https://www.w3schools.com/howto/img_avatar2.png'},
-    {chatId: 2, title:'Fulano de Tal', avatar: 'https://www.w3schools.com/howto/img_avatar2.png'},
-    {chatId: 3, title:'Fulano de Tal', avatar: 'https://www.w3schools.com/howto/img_avatar2.png'},
-    {chatId: 4, title:'Fulano de Tal', avatar: 'https://www.w3schools.com/howto/img_avatar2.png'},
-  ]);
+  const [chatList, setChatList] = useState([]);
   const [activeChat, setActiveList] = useState({});
   const [user, setUser] = useState(null);
   const [showNewChat, setShowNewChat] = useState(false);
@@ -33,8 +30,17 @@ export default () => {
       name: user.displayName,
       avatar: user.photoURL
     };
+    await Api.getContactList(newUser.id);
     setUser(newUser);
   };
+
+  useEffect(() => {
+    if(user !== null) {
+      let unsub = Api.onChatList(user.id, setChatList);
+      return unsub;
+    }
+  }, []);
+
 
   if (user === null) {
     return (

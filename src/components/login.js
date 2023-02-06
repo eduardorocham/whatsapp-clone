@@ -1,5 +1,4 @@
 import './login.css';
-import Api from '../authFaebook';
 import { signInWithPopup, FacebookAuthProvider } from 'firebase/auth';
 import { authentication } from '../firebaseConfig';
 
